@@ -53,6 +53,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sea
 import pickle
+import genpy
 
 from packaging import version
 
@@ -238,7 +239,7 @@ class bagreader:
                 if self.verbose:
                     print("[INFO]  Successfully created the data folder {0}.".format(self.datafolder))
  
-    def message_by_topic(self, topic):
+    def message_by_topic(self, topic, tstart=None, tend=None):
         '''
         Class method `message_by_topic` to extract message from the ROS Bag by topic name `topic`
 
@@ -260,10 +261,16 @@ class bagreader:
         '''
 
         msg_list = []
-        tstart =None
-        tend = None
+        start_time =None
+        end_time = None
+        if tstart != None and tend != None: 
+            start_time = genpy.Time(self.start_time + tstart) 
+            end_time = genpy.Time(self.start_time + tstart + tend) 
+        print("start time : {}".format(start_time))
+        print("end time   : {}".format(end_time))
         time = []
-        for topic, msg, t in self.reader.read_messages(topics=topic, start_time=tstart, end_time=tend): 
+        for topic, msg, t in self.reader.read_messages(topics=topic, start_time=start_time, end_time=end_time): 
+            # if  start_time < t.to_sec() and t.to_sec() < end_time:
             time.append(t)
             msg_list.append(msg)
 
