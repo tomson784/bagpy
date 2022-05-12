@@ -265,12 +265,11 @@ class bagreader:
         end_time = None
         if tstart != None and tend != None: 
             start_time = genpy.Time(self.start_time + tstart) 
-            end_time = genpy.Time(self.start_time + tstart + tend) 
-        print("start time : {}".format(start_time))
-        print("end time   : {}".format(end_time))
+            end_time = genpy.Time(self.start_time + tend) 
+        # print("start time : {}".format(start_time))
+        # print("end time   : {}".format(end_time))
         time = []
         for topic, msg, t in self.reader.read_messages(topics=topic, start_time=start_time, end_time=end_time): 
-            # if  start_time < t.to_sec() and t.to_sec() < end_time:
             time.append(t)
             msg_list.append(msg)
 
