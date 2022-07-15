@@ -187,7 +187,7 @@ class bagreader:
 
     '''
 
-    def __init__(self , bagfile , verbose=True , tmp = False):
+    def __init__(self , bagfile , verbose=True , tmp = False, start_time=None, end_time=None):
         self.bagfile = bagfile
         
         slashindices = find(bagfile, '/')
@@ -219,6 +219,11 @@ class bagreader:
 
         self.start_time = self.reader.get_start_time()
         self.end_time = self.reader.get_end_time()
+
+        if start_time != None:
+            self.start_time = start_time
+        if end_time != None: 
+            self.end_time = end_time
 
         self.datafolder = bagfile[0:-4]
 
@@ -261,15 +266,8 @@ class bagreader:
         '''
 
         msg_list = []
-        start_time =None
-        end_time = None
-        if tstart != None and tend != None: 
-            start_time = genpy.Time(self.start_time + tstart) 
-            end_time = genpy.Time(self.start_time + tend) 
-        # print("start time : {}".format(start_time))
-        # print("end time   : {}".format(end_time))
         time = []
-        for topic, msg, t in self.reader.read_messages(topics=topic, start_time=start_time, end_time=end_time): 
+        for topic, msg, t in self.reader.read_messages(topics=topic, start_time=genpy.Time(self.start_time), end_time=genpy.Time(self.end_time)): 
             time.append(t)
             msg_list.append(msg)
 
